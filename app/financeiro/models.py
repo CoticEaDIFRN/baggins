@@ -21,3 +21,19 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
+from django.db.models import Model, DateField, FloatField
+from django_brfied.django_brfied.models import ForeignKey
+from contrato.models import Vinculo
+
+
+class Pagamento(Model):
+    vinculo = ForeignKey('Vínculo', Vinculo)
+    valor = FloatField('Valor')
+    data_empenho = DateField('Data do empenho')
+
+    class Meta:
+        verbose_name = 'Pagamento'
+        verbose_name_plural = 'Pagamentos'
+
+    def __str__(self):
+        return "%s - %s - %s" % (self.vinculo, self.valor, self.data_empenho)
