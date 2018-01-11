@@ -21,12 +21,34 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
-from django.contrib.admin import ModelAdmin, StackedInline, register
-from .models import Edital, Vaga, Prestador, Vinculo
+from django.contrib.admin import register, ModelAdmin, StackedInline, TabularInline
+from .models import Edital, Vaga, Prestador, Vinculo, DocumentacaoPessoal, DocumentacaoCurricular, Reserva, Contato
 
 
 class VagaInline(StackedInline):
     model = Vaga
+    classes = ['collapse']
+    extra = 0
+
+
+class DocumentacaoPessoalInline(TabularInline):
+    model = DocumentacaoPessoal
+    fields = ['tipo', 'valor', 'arquivo', 'observacao', ]
+    classes = ['collapse']
+    extra = 0
+
+
+class DocumentacaoCurricularInline(TabularInline):
+    model = DocumentacaoCurricular
+    fields = ['tipo', 'valor', 'arquivo', 'observacao', ]
+    classes = ['collapse']
+    extra = 0
+
+
+class ContatoInline(TabularInline):
+    model = Contato
+    classes = ['collapse']
+    extra = 0
 
 
 @register(Edital)
@@ -41,22 +63,62 @@ class PrestadorAdmin(ModelAdmin):
             'fields': ('cpf', 'nome_civil', 'nome_social', 'nome_mae', 'nome_pai', 'data_nascimento', 'sexo',
                        'numero_siape')
         }),
-        ('Dados bancários', {
-            # 'classes': ('collapse',),
-            'fields': ('banco', 'agencia', 'conta_corrente'),
-        }),
         ('Endereço', {
-            # 'classes': ('collapse',),
+            'classes': ('collapse',),
             'fields': ('endereco_logradouro', 'endereco_numero', 'endereco_complemento', 'endereco_bairro',
                        'endereco_municipio', 'endereco_cep', 'endereco_referencia', 'endereco_zona', ),
+        }),
+        ('Dados bancários', {
+            'classes': ('collapse',),
+            'fields': ('banco', 'agencia', 'conta_corrente'),
         }),
         ('Observações', {
             'classes': ('collapse',),
             'fields': ('observacao',),
         }),
     )
+    inlines = [DocumentacaoPessoalInline, ContatoInline, ]
+    search_fields = ['nome_apresentacao', 'nome_civil', 'nome_social', 'cpf', 'numero_siape', ]
 
 
 @register(Vinculo)
-class VinculoAdmin(ModelAdmin):
-    pass
+class VinculorAdmin(ModelAdmin):
+    fieldsets = (
+        (None, {
+            'fields': ('prestador', 'vaga', 'eh_servidor', 'valor_carga_horaria', )
+        }),
+        ('Empenho', {
+            # 'classes': ('collapse',),
+            'fields': ('data_empenho', 'numero_empenho', 'valor_total_empenho', ),
+        }),
+        ('Período', {
+            # 'classes': ('collapse',),
+            'fields': ('data_inicio_previsto', 'data_fim_previsto', 'data_inicio', 'data_fim_real', ),
+        }),
+        ('Observações', {
+            'classes': ('collapse',),
+            'fields': ('observacao',),
+        }),
+    )
+    inlines = [DocumentacaoCurricularInline]
+    search_fields = ['prestador__nome_apresentacao', 'prestador__nome_civil', 'prestador__nome_social',
+                     'prestador__cpf', 'prestador__numero_siape', ]
+    list_filter = ['eh_servidor', 'vaga__edital__identificacao', 'vaga__funcao', 'vaga__funcao__tipo_carga_horaria',
+                   'vaga', ]
+
+
+@register(Reserva)
+class ReservaAdmin(ModelAdmin):
+    fieldsets = (
+        (None, {
+            'fields': ('prestador', 'vaga', 'ordem', )
+        }),
+        ('Período', {
+            'classes': ('collapse',),
+            'fields': ('convocado_em', 'assumiu_em', 'desistencia_em', 'termo_desistencia', ),
+        }),
+        ('Observações', {
+            'classes': ('collapse',),
+            'fields': ('observacao',),
+        }),
+    )

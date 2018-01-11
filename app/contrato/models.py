@@ -23,10 +23,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 from django.core.validators import MaxValueValidator, RegexValidator
 from django.db.models import Model, CharField, TextField, DateField, URLField, PositiveSmallIntegerField, FloatField, \
-                             BooleanField
+                             BooleanField, FileField
+# from django.contrib.postgres.fields import JSONField
 from django_brfied.django_brfied.models import SexoField, ForeignKey
 from django_brfied.django_brfied.mixin import EnderecoMixin
-from tipo.models import Programa, Funcao
+from python_brfied import to_choice
+from tipo.models import Programa, Funcao, DocumentacaoPessoal as TipoDocumentacaoPessoal, \
+                        DocumentacaoCurricular as TipoDocumentacaoCurricular
 
 
 class Edital(Model):
@@ -45,7 +48,7 @@ class Edital(Model):
 class Vaga(Model):
     edital = ForeignKey('Edital', Edital)
     funcao = ForeignKey('Função', Funcao)
-    carga_horaria = PositiveSmallIntegerField('Função', validators=[MaxValueValidator(40)])
+    carga_horaria = PositiveSmallIntegerField('Carga horária', validators=[MaxValueValidator(40)])
 
     class Meta:
         verbose_name = 'Vaga'
@@ -82,6 +85,31 @@ class Prestador(EnderecoMixin):
         super().save(*args, **kwargs)
 
 
+class Contato(Model):
+    TIPO_TELEFONE = 'Telefone'
+    TIPO_CELULAR = 'Celular'
+    TIPO_VOIP = 'VoIP'
+    TIPO_EMAIL = 'E-Mail'
+    TIPO_IM = 'Instant Message'
+    TIPO_SITE = 'Site'
+    TIPO_ENDERECO = 'Endereço'
+    TIPO_CHOICES = to_choice(TIPO_TELEFONE, TIPO_CELULAR, TIPO_VOIP, TIPO_EMAIL, TIPO_IM, TIPO_SITE, TIPO_ENDERECO)
+
+    prestador = ForeignKey('Prestador', Prestador)
+    tipo = CharField('Tipo', max_length=20, choices=TIPO_CHOICES)
+    principal = BooleanField('Principal')
+    nome = CharField('Nome', max_length=250, null=True, blank=True)
+    valor = CharField('Contato', max_length=250, null=True, blank=True)
+    observacao = TextField('Observações', null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Contato'
+        verbose_name_plural = 'Contatos'
+
+    def __str__(self):
+        return "%s (%s) - %s %s" % (self.nome, self.valor, self.tipo, self.principal, )
+
+
 class Vinculo(Model):
     prestador = ForeignKey('Prestador', Prestador)
     vaga = ForeignKey('Vaga', Vaga)
@@ -102,3 +130,55 @@ class Vinculo(Model):
 
     def __str__(self):
         return "%s - %s" % (self.prestador, self.vaga)
+
+
+class Reserva(Model):
+    prestador = ForeignKey('Prestador', Prestador)
+    vaga = ForeignKey('Vaga', Vaga)
+    ordem = PositiveSmallIntegerField('Ordem')
+    convocado_em = DateField('Convocado em', null=True, blank=True)
+    assumiu_em = DateField('Assumiu em', null=True, blank=True)
+    desistencia_em = DateField('Desistência em', null=True, blank=True)
+    termo_desistencia = CharField('Termo desistência', max_length=250, null=True, blank=True)
+    observacao = TextField('Observações', null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Reserva'
+        verbose_name_plural = 'Reservas'
+
+    def __str__(self):
+        return "%s - %sº como %s" % (self.prestador, self.ordem, self.vaga)
+
+
+class DocumentacaoMixin(Model):
+    valor = CharField('Identificação do documento', max_length=250)
+    arquivo = FileField('Comprovante', max_length=250)
+    data_envio = DateField('Envio', auto_now=True)
+    observacao = TextField('Observações', null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return "%s - %s" % (self.tipo, self.valor)
+
+
+class DocumentacaoPessoal(DocumentacaoMixin):
+    prestador = ForeignKey('Prestador', Prestador)
+    tipo = ForeignKey('Tipo', TipoDocumentacaoPessoal)
+
+    class Meta:
+        verbose_name = 'Documentação pessoal'
+        verbose_name_plural = 'Documentações pessoais'
+
+    def __str__(self):
+        return "%s - %s" % (self.tipo, self.valor)
+
+
+class DocumentacaoCurricular(DocumentacaoMixin):
+    vinculo = ForeignKey('Vinculo', Vinculo)
+    tipo = ForeignKey('Tipo', TipoDocumentacaoCurricular)
+
+    class Meta:
+        verbose_name = 'Documentação curricular'
+        verbose_name_plural = 'Documentações curriculares'
