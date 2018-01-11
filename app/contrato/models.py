@@ -34,6 +34,7 @@ from tipo.models import Programa, Funcao, DocumentacaoPessoal as TipoDocumentaca
 
 class Edital(Model):
     identificacao = CharField('Identificação', max_length=250, validators=[RegexValidator(regex='^\d*/\d{4} .+')])
+    descricao = CharField('Descrição', max_length=250)
     link = URLField()
     programa = ForeignKey('Programa', Programa)
 
