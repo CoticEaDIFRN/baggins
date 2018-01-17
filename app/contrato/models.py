@@ -22,8 +22,8 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 from django.core.validators import MaxValueValidator, RegexValidator
-from django.db.models import Model, CharField, TextField, DateField, URLField, PositiveSmallIntegerField, FloatField, \
-                             BooleanField, FileField
+from django.db.models import Model, CharField, TextField, DateField, URLField, PositiveSmallIntegerField, \
+                             DecimalField, BooleanField, FileField
 # from django.contrib.postgres.fields import JSONField
 from django_brfied.django_brfied.models import SexoField, ForeignKey
 from django_brfied.django_brfied.mixin import EnderecoMixin
@@ -49,7 +49,7 @@ class Edital(Model):
 class Vaga(Model):
     edital = ForeignKey('Edital', Edital)
     funcao = ForeignKey('Função', Funcao)
-    carga_horaria = PositiveSmallIntegerField('Carga horária', validators=[MaxValueValidator(40)])
+    carga_horaria = PositiveSmallIntegerField('Carga horária', validators=[MaxValueValidator(168)])
 
     class Meta:
         verbose_name = 'Vaga'
@@ -117,8 +117,8 @@ class Vinculo(Model):
     eh_servidor = BooleanField('É servidor?')
     data_empenho = DateField('Data do empenho', null=True, blank=True)
     numero_empenho = CharField('Número do empenho', max_length=20, null=True, blank=True)
-    valor_total_empenho = FloatField('Valor total do empenho', null=True, blank=True)
-    valor_carga_horaria = FloatField('Valor por hora')
+    valor_total_empenho = DecimalField('Valor total do empenho', max_digits=10, decimal_places=2, null=True, blank=True)
+    valor_carga_horaria = DecimalField('Valor por hora', max_digits=10, decimal_places=2)
     data_inicio_previsto = DateField('Data de início previsto')
     data_fim_previsto = DateField('Data de fim previsto')
     data_inicio = DateField('Data de início real', null=True, blank=True)
