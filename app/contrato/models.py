@@ -33,7 +33,8 @@ from tipo.models import Programa, Funcao, DocumentacaoPessoal as TipoDocumentaca
 
 
 class Edital(Model):
-    identificacao = CharField('Identificação', max_length=250, validators=[RegexValidator(regex='^\d*/\d{4} .+')],
+    identificacao = CharField('Identificação do edital', max_length=250,
+                              validators=[RegexValidator(regex='^\d*/\d{4} .+')],
                               help_text='Formato: 0001/2018 UORG-UORG-UORG - Evite colocar a descrição aqui')
     descricao = CharField('Descrição', max_length=250)
     link = URLField()
