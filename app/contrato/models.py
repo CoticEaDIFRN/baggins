@@ -58,7 +58,7 @@ class Vaga(Model):
         verbose_name_plural = 'Vagas'
 
     def __str__(self):
-        return "%s do edital %s" % (self.funcao, self.edital,)
+        return "%s (%s)" % (self.funcao, self.edital,)
 
 
 class Prestador(EnderecoMixin):

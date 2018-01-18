@@ -111,7 +111,7 @@ class VinculorAdmin(ModelAdmin):
                      'prestador__cpf', 'prestador__numero_siape', ]
     list_display = ['prestador', 'vaga']
     list_filter = ['eh_servidor', 'vaga__edital__identificacao', 'vaga', 'vaga__funcao',
-                   'vaga__funcao__tipo_carga_horaria', ]
+                   'vaga__funcao__jornada', ]
 
 
 @register(Reserva)
@@ -135,4 +135,4 @@ class ReservaAdmin(ModelAdmin):
                     'termo_desistencia', ]
     date_hierarchy = 'convocado_em'
     list_filter = ['ordem', 'vaga__edital__identificacao', 'vaga', 'vaga__funcao',
-                   'vaga__funcao__tipo_carga_horaria', 'convocado_em', 'assumiu_em', ]
+                   'vaga__funcao__jornada', 'convocado_em', 'assumiu_em', ]
