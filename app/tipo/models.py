@@ -68,7 +68,7 @@ class Programa(TipoAbstract):
 
 
 class Funcao(TipoAbstract):
-    tipo_carga_horaria = ForeignKey('Carga horária', CargaHoraria)
+    tipo_carga_horaria = ForeignKey('Tipo de carga horária', CargaHoraria)
 
     class Meta:
         verbose_name = 'Função'

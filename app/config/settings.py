@@ -60,27 +60,33 @@ TEMPLATES = [
 #    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 #]
 
-DEBUG = True
-SECRET_KEY = 'troqueme'
-ALLOWED_HOSTS = ['*']
+
+def env_or_default(env_name, default_value):
+    return os.environ[env_name] if env_name in os.environ else default_value
+
+
+LANGUAGE_CODE = env_or_default('DJANGO_LANGUAGE_CODE', 'pt-br')
+TIME_ZONE = env_or_default('DJANGO_TIME_ZONE', 'UTC')
+USE_I18N = env_or_default('DJANGO_USE_I18N', 'True') == 'True'
+USE_L10N = env_or_default('DJANGO_USE_L10N', 'True') == 'True'
+USE_TZ = env_or_default('DJANGO_USE_TZ', 'True') == 'True'
+
+DEBUG = env_or_default('DJANGO_DEBUG', 'True') == 'True'
+SECRET_KEY = env_or_default('DJANGO_SECRET_KEY', 'troqueme')
+ALLOWED_HOSTS = [x for x in env_or_default('DJANGO_SECRET_ALLOWED_HOSTS', '*').split(',')]
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'HOST': 'db',
-        'PORT': 5432,
+        'HOST': env_or_default('DJANGO_DB_HOST', 'db'),
+        'PORT': int(env_or_default('DJANGO_DB_PORT', '5432'),),
+        'NAME': env_or_default('DJANGO_DB_NAME', 'postgres'),
+        'USER': env_or_default('DJANGO_DB_USER', 'postgres'),
+        'PASSWORD': env_or_default('DJANGO_DB_PASS', 'postgres'),
     }
 }
 
-URL_PATH_PREFIX = os.environ['URL_PATH_PREFIX'] if 'URL_PATH_PREFIX' in os.environ else 'baggins/'
+URL_PATH_PREFIX = env_or_default('URL_PATH_PREFIX', 'baggins/')
 LOGIN_URL = '/%saccounts/login/' % URL_PATH_PREFIX
 LOGIN_REDIRECT_URL = '/%saccounts/profile/' % URL_PATH_PREFIX
-LANGUAGE_CODE = 'pt-br'
-TIME_ZONE = 'UTC'
-USE_I18N = True
-USE_L10N = True
-USE_TZ = True
-
 STATIC_URL = '/%sstatic/' % URL_PATH_PREFIX

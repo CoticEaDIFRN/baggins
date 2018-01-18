@@ -25,7 +25,7 @@ from django.contrib.admin import register, ModelAdmin, StackedInline, TabularInl
 from .models import Edital, Vaga, Prestador, Vinculo, DocumentacaoPessoal, DocumentacaoCurricular, Reserva, Contato
 
 
-class VagaInline(StackedInline):
+class VagaInline(TabularInline):
     model = Vaga
     classes = ['collapse']
     extra = 0
@@ -54,6 +54,10 @@ class ContatoInline(TabularInline):
 @register(Edital)
 class EditalAdmin(ModelAdmin):
     inlines = [VagaInline]
+    search_fields = ['identificacao', 'descricao', ]
+    list_display = ['identificacao', 'descricao', 'programa', ]
+    list_select_related = ('programa', )
+    list_filter = ('programa__nome', )
 
 
 @register(Prestador)
@@ -78,7 +82,9 @@ class PrestadorAdmin(ModelAdmin):
         }),
     )
     inlines = [DocumentacaoPessoalInline, ContatoInline, ]
-    search_fields = ['nome_apresentacao', 'nome_civil', 'nome_social', 'cpf', 'numero_siape', ]
+    search_fields = ['nome_apresentacao', 'nome_civil', 'nome_social', 'cpf', 'numero_siape', 'observacao']
+    list_display = ['nome_apresentacao', 'cpf', 'numero_siape', 'sexo', ]
+    list_filter = ('sexo', )
 
 
 @register(Vinculo)
@@ -103,8 +109,9 @@ class VinculorAdmin(ModelAdmin):
     inlines = [DocumentacaoCurricularInline]
     search_fields = ['prestador__nome_apresentacao', 'prestador__nome_civil', 'prestador__nome_social',
                      'prestador__cpf', 'prestador__numero_siape', ]
-    list_filter = ['eh_servidor', 'vaga__edital__identificacao', 'vaga__funcao', 'vaga__funcao__tipo_carga_horaria',
-                   'vaga', ]
+    list_display = ['prestador', 'vaga']
+    list_filter = ['eh_servidor', 'vaga__edital__identificacao', 'vaga', 'vaga__funcao',
+                   'vaga__funcao__tipo_carga_horaria', ]
 
 
 @register(Reserva)
@@ -122,3 +129,10 @@ class ReservaAdmin(ModelAdmin):
             'fields': ('observacao',),
         }),
     )
+    search_fields = ['prestador__nome_apresentacao', 'prestador__nome_civil', 'prestador__nome_social',
+                     'prestador__cpf', 'prestador__numero_siape', 'observacao', ]
+    list_display = ['prestador', 'vaga', 'ordem', 'convocado_em', 'assumiu_em', 'desistencia_em',
+                    'termo_desistencia', ]
+    date_hierarchy = 'convocado_em'
+    list_filter = ['ordem', 'vaga__edital__identificacao', 'vaga', 'vaga__funcao',
+                   'vaga__funcao__tipo_carga_horaria', 'convocado_em', 'assumiu_em', ]

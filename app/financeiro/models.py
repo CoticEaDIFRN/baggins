@@ -21,14 +21,14 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
-from django.db.models import Model, DateField, FloatField
+from django.db.models import Model, DateField, DecimalField
 from django_brfied.django_brfied.models import ForeignKey
 from contrato.models import Vinculo
 
 
 class Pagamento(Model):
     vinculo = ForeignKey('Vínculo', Vinculo)
-    valor = FloatField('Valor')
+    valor = DecimalField('Valor', max_digits=10, decimal_places=2)
     data_empenho = DateField('Data do empenho')
 
     class Meta:
