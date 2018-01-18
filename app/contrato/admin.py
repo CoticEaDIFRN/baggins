@@ -118,7 +118,7 @@ class VinculorAdmin(ModelAdmin):
 class ReservaAdmin(ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('prestador', 'vaga', 'ordem', )
+            'fields': ('prestador', 'ordem', 'vaga', )
         }),
         ('Período', {
             'classes': ('collapse',),
