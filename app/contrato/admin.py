@@ -23,6 +23,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 from django.contrib.admin import register, ModelAdmin, StackedInline, TabularInline
 from .models import Edital, Vaga, Prestador, Vinculo, DocumentacaoPessoal, DocumentacaoCurricular, Reserva, Contato
+from daterange_filter.filter import DateRangeFilter
 
 
 class VagaInline(TabularInline):
@@ -111,7 +112,12 @@ class VinculorAdmin(ModelAdmin):
                      'prestador__cpf', 'prestador__numero_siape', ]
     list_display = ['prestador', 'vaga']
     list_filter = ['eh_servidor', 'vaga__edital__identificacao', 'vaga', 'vaga__funcao',
-                   'vaga__funcao__jornada', ]
+                   'vaga__funcao__jornada',
+                   ('data_empenho', DateRangeFilter),
+                   ('data_inicio_previsto', DateRangeFilter),
+                   ('data_fim_previsto', DateRangeFilter),
+                   ('data_inicio', DateRangeFilter),
+                   ('data_fim_real', DateRangeFilter), ]
 
 
 @register(Reserva)
@@ -131,8 +137,21 @@ class ReservaAdmin(ModelAdmin):
     )
     search_fields = ['prestador__nome_apresentacao', 'prestador__nome_civil', 'prestador__nome_social',
                      'prestador__cpf', 'prestador__numero_siape', 'observacao', ]
-    list_display = ['prestador', 'vaga', 'ordem', 'convocado_em', 'assumiu_em', 'desistencia_em',
-                    'termo_desistencia', ]
+    list_display = ['prestador', 'funcao', 'edital', 'ordem', 'convocado_em', 'assumiu_em', 'desistencia_em', ]
     date_hierarchy = 'convocado_em'
     list_filter = ['ordem', 'vaga__edital__identificacao', 'vaga', 'vaga__funcao',
-                   'vaga__funcao__jornada', 'convocado_em', 'assumiu_em', ]
+                   'vaga__funcao__jornada',
+                   ('convocado_em', DateRangeFilter),
+                   ('assumiu_em', DateRangeFilter), ]
+
+    def get_row_css(self, obj):
+        return obj.status
+
+    def funcao(self, obj):
+        return obj.vaga.funcao.nome
+    funcao.admin_order_field = 'vaga__funcao__nome'
+    funcao.short_description = 'Função'
+
+    def edital(self, obj):
+        return obj.vaga.edital.identificacao
+    edital.admin_order_field = 'vaga__edital__identificacao'
