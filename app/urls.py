@@ -26,6 +26,8 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.generic import RedirectView
 from django.conf import settings
+import debug_toolbar
+
 
 urlpatterns = [
     path('%s' % settings.URL_PATH_PREFIX, include([
@@ -34,3 +36,6 @@ urlpatterns = [
     ])),
     path('', RedirectView.as_view(url='/%s' % settings.URL_PATH_PREFIX)),
 ]
+
+if settings.DEBUG:
+    urlpatterns.append(path(r'%s/__debug__/' % settings.URL_PATH_PREFIX, include(debug_toolbar.urls)))
