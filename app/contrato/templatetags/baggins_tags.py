@@ -20,40 +20,13 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-
 """
-from django.contrib.admin import ModelAdmin, register
-from .models import DocumentacaoPessoal, DocumentacaoCurricular, Programa, Funcao
+from django import template
+register = template.Library()
 
 
-@register(DocumentacaoPessoal)
-class DocumentacaoPessoalAdmin(ModelAdmin):
-    list_display = ('nome', )
-    list_editable = ('nome', )
-    list_display_links = None
-    pass
-
-
-@register(DocumentacaoCurricular)
-class DocumentacaoCurricularAdmin(ModelAdmin):
-    list_display = ('nome', )
-    list_editable = ('nome', )
-    list_display_links = None
-    pass
-
-
-@register(Programa)
-class ProgramaAdmin(ModelAdmin):
-    list_display = ('nome', )
-    list_editable = ('nome', )
-    list_display_links = None
-    pass
-
-
-@register(Funcao)
-class FuncaoAdmin(ModelAdmin):
-    list_display = ('nome', 'jornada', )
-    list_editable = ('nome', 'jornada', )
-    list_display_links = None
-    pass
+@register.simple_tag
+def row_css(cl, index):
+    if not hasattr(cl.model_admin, 'get_row_css'):
+        return u''
+    return cl.model_admin.get_row_css(cl.result_list[index])

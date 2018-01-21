@@ -22,8 +22,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 from django.db.models import Model, CharField
-from django_brfied.django_brfied.models import ForeignKey
-
+from python_brfied import to_choice
 
 class TipoAbstract(Model):
     nome = CharField('Nome', max_length=255)
@@ -51,14 +50,6 @@ class DocumentacaoCurricular(TipoAbstract):
         ordering = ['nome']
 
 
-class CargaHoraria(TipoAbstract):
-
-    class Meta:
-        verbose_name = 'Carga horária'
-        verbose_name_plural = 'Cargas horárias'
-        ordering = ['nome']
-
-
 class Programa(TipoAbstract):
 
     class Meta:
@@ -68,12 +59,12 @@ class Programa(TipoAbstract):
 
 
 class Funcao(TipoAbstract):
-    tipo_carga_horaria = ForeignKey('Tipo de carga horária', CargaHoraria)
+    SEMANAL = 'Semanal'
+    MENSAL = 'Mensal'
+    CHOICES = to_choice(SEMANAL, MENSAL)
+    jornada = CharField('Jornada', max_length=10, choices=CHOICES, default=SEMANAL)
 
     class Meta:
         verbose_name = 'Função'
         verbose_name_plural = 'Funções'
         ordering = ['nome']
-
-    def __str__(self):
-        return "%s (%s)" % (self.nome, self.tipo_carga_horaria.nome)

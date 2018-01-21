@@ -1,15 +1,18 @@
 import os
 
-MY_APPS = (
-    'tipo',
-    'contrato',
-    'financeiro',
-)
 
-THIRD_APPS = (
-    'django_brfied.django_brfied',
-    'django_extensions',
-)
+def env_or_default(env_name, default_value):
+    return os.environ[env_name] if env_name in os.environ else default_value
+
+
+DEBUG = env_or_default('DJANGO_DEBUG', 'True') == 'True'
+
+MY_APPS = ('tipo', 'contrato', 'financeiro', )
+THIRD_APPS = ('django_brfied.django_brfied', 'daterange_filter', )
+if DEBUG:
+    DEV_APPS = ('django_extensions', 'debug_toolbar', )
+else:
+    DEV_APPS = tuple()
 
 DJANGO_APPS = (
     'django.contrib.admin',
@@ -20,11 +23,12 @@ DJANGO_APPS = (
     'django.contrib.staticfiles',
 )
 
-INSTALLED_APPS = MY_APPS + THIRD_APPS + DJANGO_APPS
+INSTALLED_APPS = MY_APPS + THIRD_APPS + DEV_APPS + DJANGO_APPS
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ROOT_URLCONF = 'config.urls'
-WSGI_APPLICATION = 'config.wsgi.application'
+ROOT_URLCONF = 'urls'
+WSGI_APPLICATION = 'wsgi.application'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -36,6 +40,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
 ]
+
+if DEBUG:
+    MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware', ] + MIDDLEWARE
 
 TEMPLATES = [
     {
@@ -53,27 +60,16 @@ TEMPLATES = [
     },
 ]
 
-#AUTH_PASSWORD_VALIDATORS = [
-#    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
-#    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
-#    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
-#    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
-#]
-
-
-def env_or_default(env_name, default_value):
-    return os.environ[env_name] if env_name in os.environ else default_value
-
-
 LANGUAGE_CODE = env_or_default('DJANGO_LANGUAGE_CODE', 'pt-br')
 TIME_ZONE = env_or_default('DJANGO_TIME_ZONE', 'UTC')
 USE_I18N = env_or_default('DJANGO_USE_I18N', 'True') == 'True'
-USE_L10N = env_or_default('DJANGO_USE_L10N', 'True') == 'True'
+# USE_L10N = env_or_default('DJANGO_USE_L10N', 'True') == 'True'
 USE_TZ = env_or_default('DJANGO_USE_TZ', 'True') == 'True'
+DATE_FORMAT = 'd/b/Y'
+SHORT_DATE_FORMAT = 'd/m/Y'
 
-DEBUG = env_or_default('DJANGO_DEBUG', 'True') == 'True'
 SECRET_KEY = env_or_default('DJANGO_SECRET_KEY', 'troqueme')
-ALLOWED_HOSTS = [x for x in env_or_default('DJANGO_SECRET_ALLOWED_HOSTS', '*').split(',')]
+ALLOWED_HOSTS = env_or_default('DJANGO_SECRET_ALLOWED_HOSTS', '*').split(',')
 
 DATABASES = {
     'default': {

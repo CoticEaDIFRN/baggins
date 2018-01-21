@@ -58,7 +58,7 @@ class Vaga(Model):
         verbose_name_plural = 'Vagas'
 
     def __str__(self):
-        return "%s do edital %s" % (self.funcao, self.edital,)
+        return "%s (%s)" % (self.funcao, self.edital,)
 
 
 class Prestador(EnderecoMixin):
@@ -151,6 +151,16 @@ class Reserva(Model):
 
     def __str__(self):
         return "%s - %sº como %s" % (self.prestador, self.ordem, self.vaga)
+
+    @property
+    def status(self):
+        if self.desistencia_em is not None:
+            return 'desistiu'
+        if self.assumiu_em is not None:
+            return 'assumiu'
+        if self.convocado_em is not None:
+            return 'convocado'
+        return 'reserva'
 
 
 class DocumentacaoMixin(Model):
