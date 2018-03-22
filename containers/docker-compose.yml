@@ -3,6 +3,7 @@ version: '2'
 services:
   db:
     image: postgres
+    restart: always
     volumes:
       - pgdata:/var/lib/postgresql/data
   baggins:
@@ -10,6 +11,7 @@ services:
     build:
       context: ./baggins
     command: python3 manage.py runserver 0.0.0.0:8000
+    restart: always
     volumes:
       - .:/code
     ports:
