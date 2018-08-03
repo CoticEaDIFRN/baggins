@@ -1,6 +1,0 @@
-#!/bin/bash
-#
-# Build the Docker images.
-
-docker-compose run baggin bash
-

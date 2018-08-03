@@ -1,0 +1,4 @@
+#!/bin/bash
+source color_logs
+
+docker-compose run suapsso python3 manage.py migrate $@

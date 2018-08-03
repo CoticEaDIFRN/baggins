@@ -1,6 +1,4 @@
 #!/bin/bash
-#
-# Build the Docker images.
+source color_logs
 
 docker-compose build $@
-

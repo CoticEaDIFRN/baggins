@@ -1,0 +1,4 @@
+#!/bin/bash
+source color_logs
+
+docker-compose exec app bash

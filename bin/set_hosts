@@ -1,8 +1,5 @@
 #!/bin/bash
-#
-# Set the required hosts.
-
-source env.sh
+source color_logs
 
 for h in $(compgen -A variable | grep "HOST_"); do
   if grep -q " ${!h}" /etc/hosts; then
