@@ -9,7 +9,7 @@ ALLOWED_HOSTS = env_as_list('DJANGO_ALLOWED_HOSTS', '*' if DEBUG else '')
 
 MY_APPS = env_as_list('MY_APPS', 'tipo,contrato,financeiro')
 
-DEV_APPS = env_as_list('DEV_APPS', 'django_extensions,django-debug-toolbar') if DEBUG else []
+DEV_APPS = env_as_list('DEV_APPS', 'django_extensions,debug_toolbar') if DEBUG else []
 
 THIRD_APPS = env_as_list('THIRD_APPS', 'daterange_filter')
 
