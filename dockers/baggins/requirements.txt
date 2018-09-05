@@ -1,5 +1,5 @@
 django==2.0
-psycopg2==2.7.3.2
+#psycopg2==2.7.3.2
 django_brfied==0.4.2
 
 # http://django-suit.readthedocs.io/en/develop/getting_started.html#installation

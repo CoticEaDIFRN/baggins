@@ -2,5 +2,5 @@
 #
 # Run the PTD containers.
 
-docker-compose run baggins python3 manage.py $@
+docker-compose exec baggins python3 manage.py $@
 

@@ -2,5 +2,5 @@
 #
 # Build the Docker images.
 
-docker-compose run baggin bash
+docker-compose exec baggins bash
 

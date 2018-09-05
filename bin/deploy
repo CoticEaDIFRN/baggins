@@ -1,6 +1,6 @@
 #!/bin/bash
 ./down
-./build --dev $1
+./build
 ./migrate
-./manage collectstatic
+#./manage collectstatic
 ./down
