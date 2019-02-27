@@ -63,18 +63,18 @@ class Vaga(Model):
 
 class Prestador(EnderecoMixin):
     cpf = CharField('CPF', max_length=11)
-    nome_civil = CharField('Nome civil', max_length=255, required=False)
-    nome_social = CharField('Nome social', max_length=255, null=True, blank=True, required=False)
-    nome_apresentacao = CharField('Nome', max_length=255, required=False)
-    nome_mae = CharField('Nome da mãe', max_length=255, required=False)
-    nome_pai = CharField('Nome do pai', max_length=255, null=True, blank=True, required=False)
-    data_nascimento = DateField('Data de nascimento', required=False)
-    sexo = SexoField(required=False)
+    nome_civil = CharField('Nome civil', max_length=255, null=True, blank=True)
+    nome_social = CharField('Nome social', max_length=255, null=True, blank=True)
+    nome_apresentacao = CharField('Nome', max_length=255, null=True, blank=True)
+    nome_mae = CharField('Nome da mãe', max_length=255, null=True, blank=True)
+    nome_pai = CharField('Nome do pai', max_length=255, null=True, blank=True)
+    data_nascimento = DateField('Data de nascimento', null=True, blank=True)
+    sexo = SexoField(null=True, blank=True)
     numero_siape = CharField('Número do SIAPE', max_length=7, null=True, blank=True)
-    banco = CharField('Banco', max_length=250, null=True, blank=True, required=False)
-    agencia = CharField('Agência', max_length=250, null=True, blank=True, required=False)
-    conta_corrente = CharField('Conta', max_length=250, null=True, blank=True, required=False)
-    observacao = TextField('Observações', null=True, blank=True, required=False)
+    banco = CharField('Banco', max_length=250, null=True, blank=True)
+    agencia = CharField('Agência', max_length=250, null=True, blank=True)
+    conta_corrente = CharField('Conta', max_length=250, null=True, blank=True)
+    observacao = TextField('Observações', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Prestador'
@@ -101,9 +101,9 @@ class Contato(Model):
     prestador = ForeignKey('Prestador', Prestador)
     tipo = CharField('Tipo', max_length=20, choices=TIPO_CHOICES)
     principal = BooleanField('Principal')
-    nome = CharField('Nome', max_length=250, null=True, blank=True, required=False)
-    valor = CharField('Contato', max_length=250, null=True, blank=True, required=False)
-    observacao = TextField('Observações', null=True, blank=True, required=False)
+    nome = CharField('Nome', max_length=250, null=True, blank=True)
+    valor = CharField('Contato', max_length=250, null=True, blank=True)
+    observacao = TextField('Observações', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Contato'
@@ -117,15 +117,15 @@ class Vinculo(Model):
     prestador = ForeignKey('Prestador', Prestador)
     vaga = ForeignKey('Vaga', Vaga)
     eh_servidor = BooleanField('É servidor?')
-    data_empenho = DateField('Data do empenho', null=True, blank=True,required=False)
-    numero_empenho = CharField('Número do empenho', max_length=20, null=True, blank=True,required=False)
-    valor_total_empenho = DecimalField('Valor total do empenho', max_digits=10, decimal_places=2, null=True, blank=True,required=False)
-    valor_carga_horaria = DecimalField('Valor por hora', max_digits=10, decimal_places=2,required=False)
-    data_inicio_previsto = DateField('Data de início previsto',required=False)
-    data_fim_previsto = DateField('Data de fim previsto',required=False)
-    data_inicio = DateField('Data de início real', null=True, blank=True,required=False)
-    data_fim_real = DateField('Data de fim real', null=True, blank=True,required=False)
-    observacao = TextField('Observações', null=True, blank=True,required=False)
+    data_empenho = DateField('Data do empenho', null=True, blank=True)
+    numero_empenho = CharField('Número do empenho', max_length=20, null=True, blank=True)
+    valor_total_empenho = DecimalField('Valor total do empenho', max_digits=10, decimal_places=2, null=True, blank=True)
+    valor_carga_horaria = DecimalField('Valor por hora', max_digits=10, decimal_places=2,null=True, blank=True)
+    data_inicio_previsto = DateField('Data de início previsto',null=True, blank=True)
+    data_fim_previsto = DateField('Data de fim previsto',null=True, blank=True)
+    data_inicio = DateField('Data de início real', null=True, blank=True)
+    data_fim_real = DateField('Data de fim real', null=True, blank=True)
+    observacao = TextField('Observações', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Vínculo'
@@ -164,10 +164,10 @@ class Reserva(Model):
 
 
 class DocumentacaoMixin(Model):
-    valor = CharField('Identificação do documento', max_length=250,required=False)
-    arquivo = FileField('Comprovante', max_length=250,required=False)
-    data_envio = DateField('Envio', auto_now=True,required=False)
-    observacao = TextField('Observações', null=True, blank=True,required=False)
+    valor = CharField('Identificação do documento', max_length=250,null=True, blank=True)
+    arquivo = FileField('Comprovante', max_length=250,null=True, blank=True)
+    data_envio = DateField('Envio', auto_now=True,null=True, blank=True)
+    observacao = TextField('Observações', null=True, blank=True)
 
     class Meta:
         abstract = True
