@@ -1,6 +1,0 @@
-#!/bin/bash
-./down
-./build
-./migrate
-#./manage collectstatic
-./down

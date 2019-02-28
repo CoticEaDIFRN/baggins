@@ -2,7 +2,7 @@
 
 import django.core.validators
 from django.db import migrations, models
-import django_brfied.django_brfied.models
+import django_brfied.models
 
 
 class Migration(migrations.Migration):
@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('nome', models.CharField(blank=True, max_length=250, null=True, verbose_name='Nome')),
                 ('valor', models.CharField(blank=True, max_length=250, null=True, verbose_name='Contato')),
                 ('observacao', models.TextField(blank=True, null=True, verbose_name='Observações')),
-                ('prestador', django_brfied.django_brfied.models.ForeignKey(on_delete=None, to='contrato.Prestador', verbose_name='Prestador')),
+                ('prestador', django_brfied.models.ForeignKey(on_delete=None, to='contrato.Prestador', verbose_name='Prestador')),
             ],
             options={
                 'verbose_name': 'Contato',
@@ -37,8 +37,8 @@ class Migration(migrations.Migration):
                 ('arquivo', models.FileField(max_length=250, upload_to='', verbose_name='Comprovante')),
                 ('data_envio', models.DateField(auto_now=True, verbose_name='Envio')),
                 ('observacao', models.TextField(blank=True, null=True, verbose_name='Observações')),
-                ('tipo', django_brfied.django_brfied.models.ForeignKey(on_delete=None, to='tipo.DocumentacaoCurricular', verbose_name='Tipo')),
-                ('vinculo', django_brfied.django_brfied.models.ForeignKey(on_delete=None, to='contrato.Vinculo', verbose_name='Vinculo')),
+                ('tipo', django_brfied.models.ForeignKey(on_delete=None, to='tipo.DocumentacaoCurricular', verbose_name='Tipo')),
+                ('vinculo', django_brfied.models.ForeignKey(on_delete=None, to='contrato.Vinculo', verbose_name='Vinculo')),
             ],
             options={
                 'verbose_name': 'Documentação curricular',
@@ -53,8 +53,8 @@ class Migration(migrations.Migration):
                 ('arquivo', models.FileField(max_length=250, upload_to='', verbose_name='Comprovante')),
                 ('data_envio', models.DateField(auto_now=True, verbose_name='Envio')),
                 ('observacao', models.TextField(blank=True, null=True, verbose_name='Observações')),
-                ('prestador', django_brfied.django_brfied.models.ForeignKey(on_delete=None, to='contrato.Prestador', verbose_name='Prestador')),
-                ('tipo', django_brfied.django_brfied.models.ForeignKey(on_delete=None, to='tipo.DocumentacaoPessoal', verbose_name='Tipo')),
+                ('prestador', django_brfied.models.ForeignKey(on_delete=None, to='contrato.Prestador', verbose_name='Prestador')),
+                ('tipo', django_brfied.models.ForeignKey(on_delete=None, to='tipo.DocumentacaoPessoal', verbose_name='Tipo')),
             ],
             options={
                 'verbose_name': 'Documentação pessoal',
@@ -71,7 +71,7 @@ class Migration(migrations.Migration):
                 ('desistencia_em', models.DateField(blank=True, null=True, verbose_name='Desistência em')),
                 ('termo_desistencia', models.CharField(blank=True, max_length=250, null=True, verbose_name='Termo desistência')),
                 ('observacao', models.TextField(blank=True, null=True, verbose_name='Observações')),
-                ('prestador', django_brfied.django_brfied.models.ForeignKey(on_delete=None, to='contrato.Prestador', verbose_name='Prestador')),
+                ('prestador', django_brfied.models.ForeignKey(on_delete=None, to='contrato.Prestador', verbose_name='Prestador')),
             ],
             options={
                 'verbose_name': 'Reserva',
@@ -86,6 +86,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='reserva',
             name='vaga',
-            field=django_brfied.django_brfied.models.ForeignKey(on_delete=None, to='contrato.Vaga', verbose_name='Vaga'),
+            field=django_brfied.models.ForeignKey(on_delete=None, to='contrato.Vaga', verbose_name='Vaga'),
         ),
     ]

@@ -21,21 +21,32 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
-from django.urls import path
-from django.conf.urls import url, include
+from django.urls import path, include
 from django.contrib import admin
 from django.views.generic import RedirectView
 from django.conf import settings
-import debug_toolbar
+from django.conf.urls.static import static
+from ege_utils.views import jwt_logout
 
 
 urlpatterns = [
-    path('%s' % settings.URL_PATH_PREFIX, include([
-        path('admin/', admin.site.urls),
-        path('', RedirectView.as_view(url='/%sadmin/' % settings.URL_PATH_PREFIX)),
-    ])),
-    path('', RedirectView.as_view(url='/%s' % settings.URL_PATH_PREFIX)),
-]
+    path(
+        settings.URL_PATH_PREFIX,
+        include(
+            [
+                path('logout/', jwt_logout, name='logout'),
+                path('', include('ege_utils.urls', namespace='ege_utils')),
+                path('admin/', admin.site.urls),
+                path('', RedirectView.as_view(url="admin")),
+            ]
+        )
+    ),
+    path('', RedirectView.as_view(url=settings.URL_PATH_PREFIX)),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
 
 if settings.DEBUG:
-    urlpatterns.append(path(r'%s/__debug__/' % settings.URL_PATH_PREFIX, include(debug_toolbar.urls)))
+    import debug_toolbar
+    urlpatterns.append(path('%s__debug__/' % settings.URL_PATH_PREFIX, include(debug_toolbar.urls)))
+
+

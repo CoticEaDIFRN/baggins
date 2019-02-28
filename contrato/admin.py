@@ -48,8 +48,9 @@ class DocumentacaoCurricularInline(TabularInline):
 
 class ContatoInline(TabularInline):
     model = Contato
-    classes = ['collapse']
-    extra = 0
+    # classes = ['collapse']
+    extra = 1
+    min_num = 1
 
 
 @register(Edital)

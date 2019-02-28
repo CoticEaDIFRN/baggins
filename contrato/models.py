@@ -25,8 +25,8 @@ from django.core.validators import MaxValueValidator, RegexValidator
 from django.db.models import Model, CharField, TextField, DateField, URLField, PositiveSmallIntegerField, \
                              DecimalField, BooleanField, FileField
 # from django.contrib.postgres.fields import JSONField
-from django_brfied.django_brfied.models import SexoField, ForeignKey
-from django_brfied.django_brfied.mixin import EnderecoMixin
+from django_brfied.models import SexoField, ForeignKey
+from django_brfied.mixin import EnderecoFacultativoMixin
 from python_brfied import to_choice
 from tipo.models import Programa, Funcao, DocumentacaoPessoal as TipoDocumentacaoPessoal, \
                         DocumentacaoCurricular as TipoDocumentacaoCurricular
@@ -61,9 +61,9 @@ class Vaga(Model):
         return "%s (%s)" % (self.funcao, self.edital,)
 
 
-class Prestador(EnderecoMixin):
+class Prestador(EnderecoFacultativoMixin):
     cpf = CharField('CPF', max_length=11)
-    nome_civil = CharField('Nome civil', max_length=255, null=True, blank=True)
+    nome_civil = CharField('Nome civil', max_length=255, null=False, blank=False)
     nome_social = CharField('Nome social', max_length=255, null=True, blank=True)
     nome_apresentacao = CharField('Nome', max_length=255, null=True, blank=True)
     nome_mae = CharField('Nome da mãe', max_length=255, null=True, blank=True)
@@ -99,7 +99,7 @@ class Contato(Model):
     TIPO_CHOICES = to_choice(TIPO_TELEFONE, TIPO_CELULAR, TIPO_VOIP, TIPO_EMAIL, TIPO_IM, TIPO_SITE, TIPO_ENDERECO)
 
     prestador = ForeignKey('Prestador', Prestador)
-    tipo = CharField('Tipo', max_length=20, choices=TIPO_CHOICES)
+    tipo = CharField('Tipo', max_length=20, choices=TIPO_CHOICES, default=TIPO_EMAIL)
     principal = BooleanField('Principal')
     nome = CharField('Nome', max_length=250, null=True, blank=True)
     valor = CharField('Contato', max_length=250, null=True, blank=True)
