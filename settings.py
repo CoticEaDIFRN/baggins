@@ -1,5 +1,5 @@
 import os
-from python_brfied.env import env, env_as_bool, env_as_list, env_as_int
+from sc4py.env import env, env_as_bool, env_as_list, env_as_int
 
 
 # Development

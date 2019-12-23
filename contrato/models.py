@@ -27,7 +27,7 @@ from django.db.models import Model, CharField, TextField, DateField, URLField, P
 # from django.contrib.postgres.fields import JSONField
 from django_brfied.models import SexoField, ForeignKey
 from django_brfied.mixin import EnderecoFacultativoMixin
-from python_brfied import to_choice
+from sc4py.choice import to_choice
 from tipo.models import Programa, Funcao, DocumentacaoPessoal as TipoDocumentacaoPessoal, \
                         DocumentacaoCurricular as TipoDocumentacaoCurricular
 

@@ -22,7 +22,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 from django.db.models import Model, CharField
-from python_brfied import to_choice
+from sc4py.choice import to_choice
 
 class TipoAbstract(Model):
     nome = CharField('Nome', max_length=255)
